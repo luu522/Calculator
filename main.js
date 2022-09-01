@@ -106,6 +106,9 @@ function getFirstNum(op){
 }
 
 function getSecondNum(){
+  if (showSecondNum == true) {
+    setResult("");
+  }
     secondNum = getResult();
     secondNum = secondNum.replace(",",".");
 }
@@ -129,7 +132,7 @@ function equalBtn() {
   }
   setResult(result);
   moreThanTenNums();
-  divisionWithZero();
+  checkError();
   operationWithoutSecondNum();
   firstNum = 0;
   secondNum = 0;
@@ -142,20 +145,39 @@ function moreThanTenNums(){
     }
 }
 
-function divisionWithZero(){
+function checkError(){
     let result = "";
     result = getResult();
-    if (result == "Infinity" || result == NaN) {
+    if (result == "Infinity" || result == "NaN") {
       setResult("ERROR");
     }
 }
 
+// document.addEventListener("keydown", (Event) =>{
+//   var keyvalue = Event.key;
+//   if (parseFloat(keyvalue)) {
+//     add(keyvalue)
+//   } else if (checkKeyOperators(keyvalue) == true) {
+//     highlightOperators(keyvalue);
+//   } else if (keyvalue == "0") {
+//     add(keyvalue);
+//   }else if (keyvalue == "Escape") {
+//     clean();
+//   }else if (keyvalue == "Control") {
+//     changeSign();
+//   }else if ("Enter") {
+//     equalBtn();
+//   }
+// })
+
+function checkKeyOperators(keyPressed){
+  if (keyPressed == "*" || "-" || "+" || "/"){
+    return true;
+  }else{
+    return false;
+  }
+}
+
 function operationWithoutSecondNum(){
-    let secondNumber = "";
-    secondNumber = getSecondNum();
-    let result = "";
-    result = getResult();
-    if (secondNumber == NaN) {
-      setResult("ERROR");
-    }
+    
 }
