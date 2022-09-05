@@ -79,3 +79,8 @@ button:active {
     font-family: 'Arial', serif; 
     font-size: 250%;
 }
+
+.disabledButtons{
+    opacity: 0.3 !important;
+    background-color:#013668 !important;
+}

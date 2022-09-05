@@ -307,7 +307,7 @@ Examples:
 
 Scenario: Disabling the second comma
 Given in the display screen the number 3,141592 is shown
-Then the comma button is disabled
+Then the comma button is disabled 
 
 Scenario Outline: Disabling the changing signs button
 Given the user opens the app

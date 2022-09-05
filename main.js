@@ -132,7 +132,7 @@ function equalBtn() {
   }
   setResult(result);
   moreThanTenNums();
-  checkError();
+  showErrorMessage();
   operationWithoutSecondNum();
   firstNum = 0;
   secondNum = 0;
@@ -145,7 +145,7 @@ function moreThanTenNums(){
     }
 }
 
-function checkError(){
+function showErrorMessage(){
     let result = "";
     result = getResult();
     if (result == "Infinity" || result == "NaN") {
@@ -178,6 +178,11 @@ function checkKeyOperators(keyPressed){
   }
 }
 
-function operationWithoutSecondNum(){
-    
+function disableButtons(number){                                          
+    let buttonClassName = document.getElementsByClassName(number);
+    for (let index = 0; index < buttonClassName.length; index++) {
+      let buttonDisabled = document.getElementsByClassName(number);
+      buttonDisabled[index].disabled = true;
+      buttonDisabled[index].classList.add("disabledButtons");     
+    }
 }
