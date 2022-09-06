@@ -7,7 +7,7 @@ let showSecondNum = false;
 
 window.onload = function (vSymbol) {
   setResult(0);
-  clean(vSymbol);
+
 };
 
 function setResult(displayVal) {
@@ -27,14 +27,29 @@ function add(key) {
     }
     let result = getResult();
     if (result.length < 10 ||(result.lastIndexOf(",") <= 9 && result.length < 11)) {
-    if (result != "0" || isNaN(key)) setResult(result + key);
-    else setResult(key);
-  }
+      if (result != "0" || isNaN(key)){
+        setResult(result + key);
+      }else{
+        setResult(key);
+      }
+    }
+    if (result.length > 10 ||(result.lastIndexOf(",") >= 9 && result.length > 11)) {
+      disableButtons("number");
+      disableButtons("btn-point");
+    }
 }
 
 function clean(vSymbol) {
   unhighlightOperators(vLastHighlighted);
   setResult(0);
+
+  disableButtons("btn-0");
+  enableButtons("number");
+  disableButtons("btn-changesign");
+  enableClear();
+  enableEqual();
+  enableButtons("operator");
+  enableButtons("btn-point");
 }
 
 function equalUnhighlight() {
@@ -103,6 +118,10 @@ function getFirstNum(op){
     operationSymbol = op;
     firstNum = getResult();
     firstNum = firstNum.replace(",",".");
+    disableButtons("btn-0");
+    disableButtons("btn-changesign");
+    enableButtons("number");
+    enableButtons("operator");
 }
 
 function getSecondNum(){
@@ -133,7 +152,6 @@ function equalBtn() {
   setResult(result);
   moreThanTenNums();
   showErrorMessage();
-  operationWithoutSecondNum();
   firstNum = 0;
   secondNum = 0;
 }
@@ -150,25 +168,13 @@ function showErrorMessage(){
     result = getResult();
     if (result == "Infinity" || result == "NaN") {
       setResult("ERROR");
+      disableButtons("number");
+      disableButtons("operator");
+      disableButtons("btn-changesign");
+      disableButtons("btn-point");
+      disableButtons("btn-equal");
     }
 }
-
-// document.addEventListener("keydown", (Event) =>{
-//   var keyvalue = Event.key;
-//   if (parseFloat(keyvalue)) {
-//     add(keyvalue)
-//   } else if (checkKeyOperators(keyvalue) == true) {
-//     highlightOperators(keyvalue);
-//   } else if (keyvalue == "0") {
-//     add(keyvalue);
-//   }else if (keyvalue == "Escape") {
-//     clean();
-//   }else if (keyvalue == "Control") {
-//     changeSign();
-//   }else if ("Enter") {
-//     equalBtn();
-//   }
-// })
 
 function checkKeyOperators(keyPressed){
   if (keyPressed == "*" || "-" || "+" || "/"){
@@ -178,11 +184,41 @@ function checkKeyOperators(keyPressed){
   }
 }
 
-function disableButtons(number){                                          
-    let buttonClassName = document.getElementsByClassName(number);
-    for (let index = 0; index < buttonClassName.length; index++) {
-      let buttonDisabled = document.getElementsByClassName(number);
-      buttonDisabled[index].disabled = true;
-      buttonDisabled[index].classList.add("disabledButtons");     
-    }
+// disabling buttons
+
+function disableButtons(className){
+  let idResult = document.getElementsByClassName(className);
+  for (let index = 0; index < idResult.length; index++) {
+    let idButton = document.getElementsByClassName(className);
+    idButton[index].style.backgroundColor = "#525f6a";
+    idButton[index].style.cursor = "not-allowed";
+    idButton[index].disabled= true;
+  }
 }
+
+// enabling buttons
+
+function enableButtons(className){
+  let idResult = document.getElementsByClassName(className);
+  for (let index = 0; index < idResult.length; index++) {
+    let idButton = document.getElementsByClassName(className);
+    idButton[index].style.backgroundColor = "#013668";
+    idButton[index].style.cursor = "default";
+    idButton[index].disabled= false;
+  }
+}
+
+// functions to enable just the clear button and the equal
+
+function enableClear(){
+  document.getElementById("clear").style.backgroundColor = "#bad8f8";
+  document.getElementById("clear").style.cursor = "default";
+  document.getElementById("clear").disabled= false;
+}
+
+function enableEqual(){
+  document.getElementById("equal").style.backgroundColor = "#bad8f8";
+  document.getElementById("equal").style.cursor = "default";
+  document.getElementById("equal").disabled= false;
+}
+

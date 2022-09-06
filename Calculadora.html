@@ -16,7 +16,7 @@
             </div>
 
             <button class="btn-c" id="clear" onclick="clean()">C</button>
-            <button class="btn-ans" id="changeSign" onclick="changeSign()">+/-</button>
+            <button class="btn-changesign" id="changeSign" onclick="changeSign()">+/-</button>
             <button class="operator" id="divide" value="divide" onclick="highlightOperators(this.value), getFirstNum('/')">/</button>
 
             <button class="number" onclick="add('7')">7</button>
@@ -34,7 +34,7 @@
             <button class="number" onclick="add('3')">3</button>
             <button class="operator" id="sum" value="sum" onclick="highlightOperators(this.value), getFirstNum('+')">+</button>
             
-            <button class="btn-0" id="zero" onclick="add('0')">0</button>
+            <button class="btn-0 number" id="zero" onclick="add('0')">0</button>
             <button class="btn-point" id="comma" onclick="add('.')">,</button>
             <button class="btn-equal" id="equal" value="equal" onclick="getSecondNum(), equalUnhighlight(), equalBtn()">=</button>
         </div>
