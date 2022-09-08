@@ -7,7 +7,7 @@ let showSecondNum = false;
 
 window.onload = function (vSymbol) {
   setResult(0);
-
+  clean(vSymbol);
 };
 
 function setResult(displayVal) {
@@ -26,16 +26,26 @@ function add(key) {
         showSecondNum = false;
     }
     let result = getResult();
-    if (result.length < 10 ||(result.lastIndexOf(",") <= 9 && result.length < 11)) {
-      if (result != "0" || isNaN(key)){
+    if (result.includes(',') && result.includes('-') ) {
+      if (result.length < 12) {
         setResult(result + key);
-      }else{
-        setResult(key);
+      }
+    } else if (result.includes(',') || result.includes('-') ) {
+      if (result.length < 11) {
+        setResult(result + key);
+      }
+    } else {
+      if (result.length < 10) {
+        if (result != "0" || isNaN(key)){
+          setResult(result + key);
+        } else{
+          setResult(key);
+        }
       }
     }
-    if (result.length > 10 ||(result.lastIndexOf(",") >= 9 && result.length > 11)) {
-      disableButtons("number");
-      disableButtons("btn-point");
+     if (result.length > 8 ||(result.lastIndexOf(",") >= 9 && result.length > 10)) {
+       disableButtons("number");
+       disableButtons("btn-point");
     }
 }
 
@@ -45,10 +55,9 @@ function clean(vSymbol) {
 
   disableButtons("btn-0");
   enableButtons("number");
-  disableButtons("btn-changesign");
-  enableClear();
-  enableEqual();
   enableButtons("operator");
+  enableEqual();
+  enableButtons("btn-changesign");
   enableButtons("btn-point");
 }
 
@@ -118,10 +127,11 @@ function getFirstNum(op){
     operationSymbol = op;
     firstNum = getResult();
     firstNum = firstNum.replace(",",".");
+
     disableButtons("btn-0");
     disableButtons("btn-changesign");
     enableButtons("number");
-    enableButtons("operator");
+    enableButtons("btn-point");
 }
 
 function getSecondNum(){
@@ -163,16 +173,31 @@ function moreThanTenNums(){
     }
 }
 
+function disableSecondComma(key){
+  let result = getResult();
+  if (key == ".") {
+    if (result.includes(",") && key == ".") {
+      setResult(result)
+    }else{
+      setResult(result + key);
+      disableButtons("changeSign");
+      disableButtons("comma");
+    }
+  }
+}
+
 function showErrorMessage(){
     let result = "";
     result = getResult();
-    if (result == "Infinity" || result == "NaN") {
+    if (result == "Infinity" || result == "NaN" || result == "-Infinity") {
       setResult("ERROR");
+
+      disableButtons("btn-0");
       disableButtons("number");
       disableButtons("operator");
-      disableButtons("btn-changesign");
-      disableButtons("btn-point");
       disableButtons("btn-equal");
+      disableButtons("btn-point");
+      disableButtons("btn-changesign");
     }
 }
 

@@ -11,32 +11,32 @@
 <body>
     <div class="container">
         <div class="calculator">
-            <div class="display">
+            <div class="display" data-testid=display>
                 <p id="displayid"></p>
             </div>
 
-            <button class="btn-c" id="clear" onclick="clean()">C</button>
-            <button class="btn-changesign" id="changeSign" onclick="changeSign()">+/-</button>
-            <button class="operator" id="divide" value="divide" onclick="highlightOperators(this.value), getFirstNum('/')">/</button>
+            <button class="btn-c" data-testid="C" id="clear" onclick="clean()">C</button>
+            <button class="btn-changesign" data-testid="+-" id="changeSign" onclick="changeSign()">+/-</button>
+            <button class="operator" id="divide" data-testid="/" value="divide" onclick="highlightOperators(this.value), getFirstNum('/')">/</button>
 
-            <button class="number" onclick="add('7')">7</button>
-            <button class="number" onclick="add('8')">8</button>
-            <button class="number" onclick="add('9')">9</button>
-            <button class="operator" id="multiply" value="multiply" onclick="highlightOperators(this.value), getFirstNum('*')">x</button>
+            <button class="number" data-testid="7" onclick="add('7')">7</button>
+            <button class="number" data-testid="8" onclick="add('8')">8</button>
+            <button class="number" data-testid="9" onclick="add('9')">9</button>
+            <button class="operator" data-testid="*" id="multiply" value="multiply" onclick="highlightOperators(this.value), getFirstNum('*')">x</button>
 
-            <button class="number" onclick="add('4')">4</button>
-            <button class="number" onclick="add('5')">5</button>
-            <button class="number" onclick="add('6')">6</button>
-            <button class="operator" id="substract" value="substract" onclick="highlightOperators(this.value), getFirstNum('-')">-</button>
+            <button class="number" data-testid="4" onclick="add('4')">4</button>
+            <button class="number" data-testid="5" onclick="add('5')">5</button>
+            <button class="number" data-testid="6" onclick="add('6')">6</button>
+            <button class="operator" data-testid="-" id="substract" value="substract" onclick="highlightOperators(this.value), getFirstNum('-')">-</button>
 
-            <button class="number" onclick="add('1')">1</button>
-            <button class="number" onclick="add('2')">2</button>
-            <button class="number" onclick="add('3')">3</button>
-            <button class="operator" id="sum" value="sum" onclick="highlightOperators(this.value), getFirstNum('+')">+</button>
+            <button class="number" data-testid="1" onclick="add('1')">1</button>
+            <button class="number" data-testid="2" onclick="add('2')">2</button>
+            <button class="number" data-testid="3" onclick="add('3')">3</button>
+            <button class="operator" data-testid="+" id="sum" value="sum" onclick="highlightOperators(this.value), getFirstNum('+')">+</button>
             
-            <button class="btn-0 number" id="zero" onclick="add('0')">0</button>
-            <button class="btn-point" id="comma" onclick="add('.')">,</button>
-            <button class="btn-equal" id="equal" value="equal" onclick="getSecondNum(), equalUnhighlight(), equalBtn()">=</button>
+            <button class="btn-0 number" data-testid="0" id="zero" onclick="add('0')">0</button>
+            <button class="btn-point" data-testid="," id="comma" onclick="add(',')">,</button>
+            <button class="btn-equal" data-testid="=" id="equal" value="equal" onclick="getSecondNum(), equalUnhighlight(), equalBtn()">=</button>
         </div>
     </div>
 
