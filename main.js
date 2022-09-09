@@ -72,11 +72,14 @@ function equalUnhighlight() {
 }
 
 function changeSign() {
-  let number = "";
-  number = getResult();
-  let negativeNum = "";
-  negativeNum = negativeNum + number.replace(",", ".");
-  setResult(-negativeNum);
+  let numbersDisplay = "";
+  numbersDisplay = getResult();
+  if (numbersDisplay.charAt(numbersDisplay.length - 1) == ",") {
+    numbersDisplay = -numbersDisplay.replace(",", ".") + ",";
+  } else {
+    numbersDisplay = -numbersDisplay.replace(",", ".");
+  }
+  setResult(numbersDisplay);
 }
 
 function highlightOperators(Symbol) {
@@ -165,11 +168,12 @@ function equalBtn() {
     default:
       break;
   }
+  secondNum = 0;
+  firstNum = 0;
   setResult(result);
   moreThanTenNums();
   showErrorMessage();
-  firstNum = 0;
-  secondNum = 0;
+  showSecondNum = true;
 }
 
 function moreThanTenNums(){
