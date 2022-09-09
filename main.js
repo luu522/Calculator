@@ -5,15 +5,20 @@ let operationSymbol = "";
 let secondNum = "";
 let showSecondNum = false;
 
-window.onload = function (vSymbol) {
+window.onload = function(Symbol) {
   setResult(0);
-  clean(vSymbol);
+  clean(Symbol);
 };
 
 function setResult(displayVal) {
   let display = "";
   display = display + displayVal;
   document.getElementById("displayid").innerHTML = display.replace(".", ",");
+
+  let result = getResult();
+  if (result.includes(',') || result.includes('.')) {
+      disableButtons("btn-point");
+  }
 }
 
 function getResult() {
@@ -21,35 +26,36 @@ function getResult() {
 }
 
 function add(key) {
-    if (showSecondNum) {
-        setResult(0);
-        showSecondNum = false;
+  if (showSecondNum) {
+      setResult(0);
+      showSecondNum = false;
+      enableButtons("btn-changesign");
+  }
+  let result = getResult();
+  if (result.includes(',') && result.includes('-') ) {
+    if (result.length < 12) {
+      setResult(result + key);
     }
-    let result = getResult();
-    if (result.includes(',') && result.includes('-') ) {
-      if (result.length < 12) {
+  } else if (result.includes(',') || result.includes('-') ) {
+    if (result.length < 11) {
+      setResult(result + key);
+    }
+  } else {
+    if (result.length < 10) {
+      if (result != "0" || isNaN(key)){
         setResult(result + key);
-      }
-    } else if (result.includes(',') || result.includes('-') ) {
-      if (result.length < 11) {
-        setResult(result + key);
-      }
-    } else {
-      if (result.length < 10) {
-        if (result != "0" || isNaN(key)){
-          setResult(result + key);
-        } else{
-          setResult(key);
-        }
+      } else{
+        setResult(key);
       }
     }
-     if (result.length > 8 ||(result.lastIndexOf(",") >= 9 && result.length > 10)) {
-       disableButtons("number");
-       disableButtons("btn-point");
-    }
+  }
+   if (result.length > 8 ||(result.lastIndexOf(",") >= 9 && result.length > 10)) {
+     disableButtons("number");
+     disableButtons("btn-point");
+  }
 }
 
-function clean(vSymbol) {
+function clean() {
   unhighlightOperators(vLastHighlighted);
   setResult(0);
 
@@ -68,31 +74,31 @@ function equalUnhighlight() {
 function changeSign() {
   let number = "";
   number = getResult();
-  let negative = "";
-  negative = negative + number.replace(",", ".");
-  setResult(-negative);
+  let negativeNum = "";
+  negativeNum = negativeNum + number.replace(",", ".");
+  setResult(-negativeNum);
 }
 
-function highlightOperators(vSymbol) {
+function highlightOperators(Symbol) {
   unhighlightOperators(vLastHighlighted);
   if (isHighlighted == true) {
     isHighlighted = false;
-    switch (vSymbol) {
+    switch (Symbol) {
       case "multiply":
         multiply.style.background = "#5b7aa1";
-        vLastHighlighted = vSymbol;
+        vLastHighlighted = Symbol;
         break;
       case "divide":
         divide.style.background = "#5b7aa1";
-        vLastHighlighted = vSymbol;
+        vLastHighlighted = Symbol;
         break;
       case "sum":
         sum.style.background = "#5b7aa1";
-        vLastHighlighted = vSymbol;
+        vLastHighlighted = Symbol;
         break;
       case "substract":
         substract.style.background = "#5b7aa1";
-        vLastHighlighted = vSymbol;
+        vLastHighlighted = Symbol;
         break;
       default:
         break;
@@ -100,10 +106,10 @@ function highlightOperators(vSymbol) {
   }
 }
 
-function unhighlightOperators(vSymbol) {
+function unhighlightOperators(Symbol) {
   if (isHighlighted == false) {
     isHighlighted = true;
-    switch (vSymbol) {
+    switch (Symbol) {
       case "multiply":
         multiply.style.background = "#013668";
         break;
@@ -167,22 +173,9 @@ function equalBtn() {
 }
 
 function moreThanTenNums(){
-    let result = getResult();
-    if (result.length > 10 ) {
-        setResult("ERROR");
-    }
-}
-
-function disableSecondComma(key){
   let result = getResult();
-  if (key == ".") {
-    if (result.includes(",") && key == ".") {
-      setResult(result)
-    }else{
-      setResult(result + key);
-      disableButtons("changeSign");
-      disableButtons("comma");
-    }
+  if (result.length > 10 ) {
+    setResult("ERROR");
   }
 }
 
@@ -199,14 +192,6 @@ function showErrorMessage(){
       disableButtons("btn-point");
       disableButtons("btn-changesign");
     }
-}
-
-function checkKeyOperators(keyPressed){
-  if (keyPressed == "*" || "-" || "+" || "/"){
-    return true;
-  }else{
-    return false;
-  }
 }
 
 // disabling buttons
@@ -247,3 +232,59 @@ function enableEqual(){
   document.getElementById("equal").disabled= false;
 }
 
+//keyboard
+
+document.addEventListener("keydown", (event) => {
+  event.preventDefault();
+  let keyValue = event.key;
+  console.log("keyValue: " + keyValue);
+  switch (keyValue) {
+    case "Enter":
+      equalBtn();
+      break;
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+    case "8":
+    case "9":
+      add(keyValue);
+      break;
+    case "0":
+      let result = "";
+      result = getResult();
+      if (result.includes("0")) {
+        setResult(result);
+      } else {
+        add(keyValue)
+      }
+      break;
+    case ",":
+      add(keyValue);
+      break;
+    case "Escape":
+      clean();
+      break;
+    case "Control":
+      changeSign();
+      break;
+    case checkOperatorkeys(keyValue) == true:
+      operator(keyValue);
+      highlightOperators(Symbol);
+      break;
+    default:
+      console.log("vacio");
+      break;
+  }
+});
+
+function checkOperatorkeys(keyPressed) {
+  if (keyPressed == "*" || "-" || "+" || "/") {
+    return true;
+  } else {
+    return false;
+  }
+}

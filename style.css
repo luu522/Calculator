@@ -12,7 +12,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 1200px;
 }
 
 .display {
@@ -56,10 +56,6 @@ button:active {
     background-color: #bad8f8;
     font-family: 'Arial', serif;
     color: #013668;
-}
-
-.btn-ans {
-    font-size: 1.3em;
 }
 
 .btn-0 {
