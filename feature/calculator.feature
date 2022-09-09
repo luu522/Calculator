@@ -28,27 +28,27 @@ Examples:
 |             1 |     +- |            -1 |
 |            -1 |     +- |             1 |
 
-# Scenario Outline: Pressing non-operators keys
-# Given the display shows the following value: "<displayNumber>"
-# When the user presses the "<key>" key
-# Then the display should show the following value: "<displayResult>"
+Scenario Outline: Pressing non-operators keys
+Given the display shows the following value: "<displayNumber>"
+When the user presses the "<key>" key
+Then the display should show the following value: "<displayResult>"
 
-# Examples:
-# | displayNumber |        key | displayResult |
-# |             1 |          0 |            10 |
-# |             0 |          1 |             1 |
-# |             0 |          2 |             2 |
-# |             0 |          3 |             3 |
-# |             0 |          4 |             4 |
-# |             0 |          5 |             5 |
-# |             0 |          6 |             6 |
-# |             0 |          7 |             7 |
-# |             0 |          8 |             8 |
-# |             0 |          9 |             9 |
-# |             0 |          , |            0, |
-# # |             1 |     Escape |             0 |
-# # |             1 |    Control |            -1 |
-# # |            -1 |    Control |             1 |
+Examples:
+| displayNumber |        key | displayResult |
+|             1 |          0 |            10 |
+|             0 |          1 |             1 |
+|             0 |          2 |             2 |
+|             0 |          3 |             3 |
+|             0 |          4 |             4 |
+|             0 |          5 |             5 |
+|             0 |          6 |             6 |
+|             0 |          7 |             7 |
+|             0 |          8 |             8 |
+|             0 |          9 |             9 |
+|             0 |          , |            0, |
+|             1 |     Escape |             0 |
+|             1 |    Control |            -1 |
+|            -1 |    Control |             1 |
 
 Scenario Outline: Writing numbers 
 Given the display shows the following value: "<displayNumber>"
@@ -68,10 +68,10 @@ Examples:
 |        1234,1 |      , |        1234,1 |
 |             0 |     +- |             0 |
 |            0, |     +- |            0, |
-|           13, |     +- |          -13, |
-|          -13, |     +- |           13, |
-|          -0,5 |     +- |           0,5 |
-|           0,5 |     +- |          -0,5 |
+# |           13, |     +- |          -13, |
+# |          -13, |     +- |           13, |
+# |          -0,5 |     +- |           0,5 |
+# |           0,5 |     +- |          -0,5 |
 |             7 |     +- |            -7 |
 |          1234 |     +- |         -1234 |
 |         -1234 |     +- |          1234 |
@@ -87,8 +87,8 @@ Examples:
 |    1234567890 |     +- |   -1234567890 |
 |    1234567890 |      , |    1234567890 |
 |     123456789 |      , |    123456789, |
-|    123456789, |      5 |   123456789,5 |
-|   123456789,5 |     +- |  -123456789,5 |
+# |    123456789, |      5 |   123456789,5 |
+# |   123456789,5 |     +- |  -123456789,5 |
 
 Scenario Outline: Performing two number operations
 Given the display shows the following value: "<displayNumber>"
