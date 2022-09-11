@@ -1,13 +1,13 @@
-let isHighlighted = true;
-let vLastHighlighted;
+let isTheOperatorHighlighted = true;
+let LastHighlightedOperator = "";
 let firstNum = "";
 let operationSymbol = "";
 let secondNum = "";
-let showSecondNum = false; 
+let isSecondNumberShown = false; 
 
 window.onload = function() {
   setResult(0);
-  clean();
+  cleanDisplay();
 };
 
 function setResult(displayVal) {
@@ -26,9 +26,9 @@ function getResult() {
 }
 
 function add(key) {
-  if (showSecondNum) {
+  if (isSecondNumberShown) {
       setResult(0);
-      showSecondNum = false;
+      isSecondNumberShown = false;
       enableButtons("btn-changesign");
   }
   let result = getResult();
@@ -55,8 +55,8 @@ function add(key) {
   }
 }
 
-function clean() {
-  unhighlightOperators(vLastHighlighted);
+function cleanDisplay() {
+  unhighlightOperator(LastHighlightedOperator);
   setResult(0);
 
   disableButtons("btn-0");
@@ -67,41 +67,37 @@ function clean() {
   enableButtons("btn-point");
 }
 
-function equalUnhighlight() {
-  unhighlightOperators(vLastHighlighted);
-}
-
-function changeSign() {
-  let numbersDisplay = "";
-  numbersDisplay = getResult();
-  if (numbersDisplay.charAt(numbersDisplay.length - 1) == ",") {
-    numbersDisplay = -numbersDisplay.replace(",", ".") + ",";
+function changeNumberSign() {
+  let displayNumbers = "";
+  displayNumbers = getResult();
+  if (displayNumbers.charAt(displayNumbers.length - 1) == ",") {
+    displayNumbers = -displayNumbers.replace(",", ".") + ",";             // adds a comma to the negative number
   } else {
-    numbersDisplay = -numbersDisplay.replace(",", ".");
+    displayNumbers = -displayNumbers.replace(",", ".");
   }
-  setResult(numbersDisplay);
+  setResult(displayNumbers);
 }
 
-function highlightOperators(Symbol) {
-  unhighlightOperators(vLastHighlighted);
-  if (isHighlighted == true) {
-    isHighlighted = false;
-    switch (Symbol) {
+function highlightOperator(ClickedOperator) {
+  unhighlightOperator(LastHighlightedOperator);
+  if (isTheOperatorHighlighted == true) {
+    isTheOperatorHighlighted = false;
+    switch (ClickedOperator) {
       case "multiply":
         multiply.style.background = "#5b7aa1";
-        vLastHighlighted = Symbol;
+        LastHighlightedOperator = ClickedOperator;
         break;
       case "divide":
         divide.style.background = "#5b7aa1";
-        vLastHighlighted = Symbol;
+        LastHighlightedOperator = ClickedOperator;
         break;
       case "sum":
         sum.style.background = "#5b7aa1";
-        vLastHighlighted = Symbol;
+        LastHighlightedOperator = ClickedOperator;
         break;
       case "substract":
         substract.style.background = "#5b7aa1";
-        vLastHighlighted = Symbol;
+        LastHighlightedOperator = ClickedOperator;
         break;
       default:
         break;
@@ -109,10 +105,10 @@ function highlightOperators(Symbol) {
   }
 }
 
-function unhighlightOperators(Symbol) {
-  if (isHighlighted == false) {
-    isHighlighted = true;
-    switch (Symbol) {
+function unhighlightOperator(ClickedOperator) {
+  if (isTheOperatorHighlighted == false) {
+    isTheOperatorHighlighted = true;
+    switch (ClickedOperator) {
       case "multiply":
         multiply.style.background = "#013668";
         break;
@@ -131,9 +127,9 @@ function unhighlightOperators(Symbol) {
   }
 }
 
-function getFirstNum(op){
-    showSecondNum = true;
-    operationSymbol = op;
+function getFirstNum(clickedOperator){
+  isSecondNumberShown = true;
+    operationSymbol = clickedOperator;
     firstNum = getResult();
     firstNum = firstNum.replace(",",".");
 
@@ -144,7 +140,7 @@ function getFirstNum(op){
 }
 
 function getSecondNum(){
-  if (showSecondNum == true) {
+  if (isSecondNumberShown == true) {
     setResult("");
   }
     secondNum = getResult();
@@ -171,22 +167,14 @@ function equalBtn() {
   secondNum = 0;
   firstNum = 0;
   setResult(result);
-  moreThanTenNums();
   showErrorMessage();
-  showSecondNum = true;
-}
-
-function moreThanTenNums(){
-  let result = getResult();
-  if (result.length > 10 ) {
-    setResult("ERROR");
-  }
+  isSecondNumberShown = true;
 }
 
 function showErrorMessage(){
     let result = "";
     result = getResult();
-    if (result == "Infinity" || result == "NaN" || result == "-Infinity") {
+    if (result == "Infinity" || result == "NaN" || result == "-Infinity" || result.length > 10) {
       setResult("ERROR");
 
       disableButtons("btn-0");
@@ -222,13 +210,7 @@ function enableButtons(className){
   }
 }
 
-// functions to enable just the clear button and the equal
-
-function enableClear(){
-  document.getElementById("clear").style.backgroundColor = "#bad8f8";
-  document.getElementById("clear").style.cursor = "default";
-  document.getElementById("clear").disabled= false;
-}
+// function to enable just the equal button-
 
 function enableEqual(){
   document.getElementById("equal").style.backgroundColor = "#bad8f8";
@@ -270,14 +252,14 @@ function doKey(event) {
       add(keyValue);
       break;
     case "Escape":
-      clean();
+      cleanDisplay();
       break;
     case "Control":
-      changeSign();
+      changeNumberSign();
       break;
     case checkOperatorkeys(keyValue) == true:
       operator(keyValue);
-      highlightOperators(Symbol);
+      highlightOperator(ClickedOperator);
       break;
     default:
       console.log("vacio");
