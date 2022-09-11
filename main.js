@@ -3,11 +3,11 @@ let vLastHighlighted;
 let firstNum = "";
 let operationSymbol = "";
 let secondNum = "";
-let showSecondNum = false;
+let showSecondNum = false; 
 
-window.onload = function(Symbol) {
+window.onload = function() {
   setResult(0);
-  clean(Symbol);
+  clean();
 };
 
 function setResult(displayVal) {
@@ -238,7 +238,7 @@ function enableEqual(){
 
 //keyboard
 
-document.addEventListener("keydown", (event) => {
+function doKey(event) {
   event.preventDefault();
   let keyValue = event.key;
   console.log("keyValue: " + keyValue);
@@ -283,7 +283,7 @@ document.addEventListener("keydown", (event) => {
       console.log("vacio");
       break;
   }
-});
+}
 
 function checkOperatorkeys(keyPressed) {
   if (keyPressed == "*" || "-" || "+" || "/") {
