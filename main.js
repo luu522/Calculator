@@ -25,7 +25,7 @@ function getResult() {
   return document.getElementById("displayid").innerHTML;
 }
 
-function add(key) {
+function addNumbersToDisplay(clickedNum) {
   if (isSecondNumberShown) {
       setResult(0);
       isSecondNumberShown = false;
@@ -34,18 +34,18 @@ function add(key) {
   let result = getResult();
   if (result.includes(',') && result.includes('-') ) {
     if (result.length < 12) {
-      setResult(result + key);
+      setResult(result + clickedNum);
     }
   } else if (result.includes(',') || result.includes('-') ) {
     if (result.length < 11) {
-      setResult(result + key);
+      setResult(result + clickedNum);
     }
   } else {
     if (result.length < 10) {
-      if (result != "0" || isNaN(key)){
-        setResult(result + key);
+      if (result != "0" || isNaN(clickedNum)){
+        setResult(result + clickedNum);
       } else{
-        setResult(key);
+        setResult(clickedNum);
       }
     }
   }
@@ -127,9 +127,9 @@ function unhighlightOperator(ClickedOperator) {
   }
 }
 
-function getFirstNum(clickedOperator){
+function getFirstNum(ClickedOperator){
   isSecondNumberShown = true;
-    operationSymbol = clickedOperator;
+    operationSymbol = ClickedOperator;
     firstNum = getResult();
     firstNum = firstNum.replace(",",".");
 
