@@ -11,69 +11,66 @@ window.onload = function() {
 };
 
 function setResult(displayVal) {
-  let display = "";
-  display = display + displayVal;
-  document.getElementById("displayid").innerHTML = display.replace(".", ",");
-
-  let result = getResult();
-  if (result.includes(',') || result.includes('.')) {
-      disableButtons("btn-point");
-  }
+  let newDisplay = displayVal.toString().replace(".", ",");
+  document.getElementById("displayid").innerHTML = newDisplay;
 }
 
+// lo ideal es no necesitar esta función
 function getResult() {
   return document.getElementById("displayid").innerHTML;
 }
 
 function addNumbersToDisplay(clickedNum) {
   if (isSecondNumberShown) {
+      // reset ??
       setResult(0);
       isSecondNumberShown = false;
-      enableButtons("btn-changesign");
   }
-  let result = getResult();
-  if (result.includes(',') && result.includes('-') ) {
-    if (result.length < 12) {
+  result = getResult();
+
+  if (clickedNum.includes(",")) {
+    if (disableSecondComma()) {
       setResult(result + clickedNum);
-    }
-  } else if (result.includes(',') || result.includes('-') ) {
-    if (result.length < 11) {
+    } 
+  } else if (isNewDigitAllowed()) {
+    if (result != "0") {
       setResult(result + clickedNum);
-    }
-  } else {
-    if (result.length < 10) {
-      if (result != "0" || isNaN(clickedNum)){
-        setResult(result + clickedNum);
-      } else{
-        setResult(clickedNum);
-      }
+    } else {
+      setResult(clickedNum);
     }
   }
-   if (result.length > 8 ||(result.lastIndexOf(",") >= 9 && result.length > 10)) {
-     disableButtons("number");
-     disableButtons("btn-point");
+}
+
+function isNewDigitAllowed(){
+  MAX_DIGITS_IN_DISPLAY = 10;
+  result = getResult();
+  if (result.includes(',') && result.includes('-')) {
+    MAX_DIGITS_IN_DISPLAY = MAX_DIGITS_IN_DISPLAY + 2;
+  } else if (result.includes(',') || result.includes('-')){
+    MAX_DIGITS_IN_DISPLAY = MAX_DIGITS_IN_DISPLAY + 1;
+  }
+
+  if (result.length < MAX_DIGITS_IN_DISPLAY) {
+    return true;
+  } else{
+    return false;
   }
 }
 
 function cleanDisplay() {
   unhighlightOperator(LastHighlightedOperator);
   setResult(0);
-
-  disableButtons("btn-0");
-  enableButtons("number");
-  enableButtons("operator");
-  enableEqual();
-  enableButtons("btn-changesign");
-  enableButtons("btn-point");
 }
 
 function changeNumberSign() {
   let displayNumbers = "";
   displayNumbers = getResult();
-  if (displayNumbers.charAt(displayNumbers.length - 1) == ",") {
-    displayNumbers = -displayNumbers.replace(",", ".") + ",";             // adds a comma to the negative number
+  displayNumbers = displayNumbers.replace(",",".");
+
+  if (displayNumbers.charAt(displayNumbers.length - 1) == ".") {    
+    displayNumbers = -displayNumbers + ".";                                 // adds a comma to the negative number
   } else {
-    displayNumbers = -displayNumbers.replace(",", ".");
+    displayNumbers = -displayNumbers;
   }
   setResult(displayNumbers);
 }
@@ -84,19 +81,27 @@ function highlightOperator(ClickedOperator) {
     isTheOperatorHighlighted = false;
     switch (ClickedOperator) {
       case "multiply":
-        multiply.style.background = "#5b7aa1";
+        let multiplyButton = document.getElementsByClassName("multiply");
+        multiplyButton[0].classList.add("highlightOperatorByClass");
+
         LastHighlightedOperator = ClickedOperator;
         break;
       case "divide":
-        divide.style.background = "#5b7aa1";
+        let divideButton = document.getElementsByClassName("divide");
+        divideButton[0].classList.add("highlightOperatorByClass");
+
         LastHighlightedOperator = ClickedOperator;
         break;
       case "sum":
-        sum.style.background = "#5b7aa1";
+        let sumButton = document.getElementsByClassName("sum");
+        sumButton[0].classList.add("highlightOperatorByClass");
+
         LastHighlightedOperator = ClickedOperator;
         break;
       case "substract":
-        substract.style.background = "#5b7aa1";
+        let substractButton = document.getElementsByClassName("substract");
+        substractButton[0].classList.add("highlightOperatorByClass");
+
         LastHighlightedOperator = ClickedOperator;
         break;
       default:
@@ -110,17 +115,20 @@ function unhighlightOperator(ClickedOperator) {
     isTheOperatorHighlighted = true;
     switch (ClickedOperator) {
       case "multiply":
-        multiply.style.background = "#013668";
+        let multiplyButton = document.getElementsByClassName("multiply");
+        multiplyButton[0].classList.remove("highlightOperatorByClass");
         break;
       case "divide":
-        divide.style.background = "#013668";
+        let divideButton = document.getElementsByClassName("divide");
+        divideButton[0].classList.remove("highlightOperatorByClass");
         break;
       case "sum":
-        sum.style.background = "#013668";
+        let sumButton = document.getElementsByClassName("sum");
+        sumButton[0].classList.remove("highlightOperatorByClass");
         break;
       case "substract":
-        substract.style.background = "#013668";
-        break;
+        let substractButton = document.getElementsByClassName("substract");
+        substractButton[0].classList.remove("highlightOperatorByClass");
       default:
         break;
     }
@@ -132,11 +140,6 @@ function getFirstNum(ClickedOperator){
     operationSymbol = ClickedOperator;
     firstNum = getResult();
     firstNum = firstNum.replace(",",".");
-
-    disableButtons("btn-0");
-    disableButtons("btn-changesign");
-    enableButtons("number");
-    enableButtons("btn-point");
 }
 
 function getSecondNum(){
@@ -176,13 +179,6 @@ function showErrorMessage(){
     result = getResult();
     if (result == "Infinity" || result == "NaN" || result == "-Infinity" || result.length > 10) {
       setResult("ERROR");
-
-      disableButtons("btn-0");
-      disableButtons("number");
-      disableButtons("operator");
-      disableButtons("btn-equal");
-      disableButtons("btn-point");
-      disableButtons("btn-changesign");
     }
 }
 

@@ -74,3 +74,7 @@ button:active {
     font-family: 'Arial', serif; 
     font-size: 250%;
 }
+
+.highlightOperatorByClass {
+    background-color: #5b7aa1 !important; 
+}
