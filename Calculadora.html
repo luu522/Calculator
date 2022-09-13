@@ -15,24 +15,24 @@
                 <p id="displayid"></p>
             </div>
 
-            <button class="btn-c" data-testid="C" id="clear" onclick="cleanDisplay()">C</button>
+            <button class="btn-c" data-testid="C" id="clear" onclick="calculatorReset()">C</button>
             <button class="btn-changesign" data-testid="+-" id="changeSign" onclick="changeNumberSign()">+/-</button>
-            <button class="operator divide" data-testid="/" id="divide" value="divide" onclick="highlightOperator(this.value), getFirstNum('/')">/</button>
+            <button class="operator divide" data-testid="/" id="divide" value="divide" onclick="highlightOperatorByClass(this.value), getFirstNum('/')">/</button>
 
             <button class="number" data-testid="7" onclick="addNumbersToDisplay('7')">7</button>
             <button class="number" data-testid="8" onclick="addNumbersToDisplay('8')">8</button>
             <button class="number" data-testid="9" onclick="addNumbersToDisplay('9')">9</button>
-            <button class="operator multiply" data-testid="*" id="multiply" value="multiply" onclick="highlightOperator(this.value), getFirstNum('*')">x</button>
+            <button class="operator multiply" data-testid="*" id="multiply" value="multiply" onclick="highlightOperatorByClass(this.value), getFirstNum('*')">x</button>
 
             <button class="number" data-testid="4" onclick="addNumbersToDisplay('4')">4</button>
             <button class="number" data-testid="5" onclick="addNumbersToDisplay('5')">5</button>
             <button class="number" data-testid="6" onclick="addNumbersToDisplay('6')">6</button>
-            <button class="operator substract" data-testid="-" id="substract" value="substract" onclick="highlightOperator(this.value), getFirstNum('-')">-</button>
+            <button class="operator substract" data-testid="-" id="substract" value="substract" onclick="highlightOperatorByClass(this.value), getFirstNum('-')">-</button>
 
             <button class="number" data-testid="1" onclick="addNumbersToDisplay('1')">1</button>
             <button class="number" data-testid="2" onclick="addNumbersToDisplay('2')">2</button>
             <button class="number" data-testid="3" onclick="addNumbersToDisplay('3')">3</button>
-            <button class="operator sum" data-testid="+" id="sum" value="sum" onclick="highlightOperator(this.value), getFirstNum('+')">+</button>
+            <button class="operator sum" data-testid="+" id="sum" value="sum" onclick="highlightOperatorByClass(this.value), getFirstNum('+')">+</button>
             
             <button class="btn-0 number" data-testid="0" id="zero" onclick="addNumbersToDisplay('0')">0</button>
             <button class="btn-point" data-testid="," id="comma" onclick="addNumbersToDisplay(',')">,</button>

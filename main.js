@@ -1,13 +1,14 @@
+let MAX_DIGITS_IN_DISPLAY = 10;  
 let isTheOperatorHighlighted = true;
 let LastHighlightedOperator = "";
 let firstNum = "";
 let operationSymbol = "";
 let secondNum = "";
+let result = "";
 let isSecondNumberShown = false; 
 
 window.onload = function() {
-  setResult(0);
-  cleanDisplay();
+  calculatorReset();
 };
 
 function setResult(displayVal) {
@@ -57,8 +58,8 @@ function isNewDigitAllowed(){
   }
 }
 
-function cleanDisplay() {
-  unhighlightOperator(LastHighlightedOperator);
+function calculatorReset() {
+  unhighlightOperatorByClass(LastHighlightedOperator);
   setResult(0);
 }
 
@@ -75,8 +76,8 @@ function changeNumberSign() {
   setResult(displayNumbers);
 }
 
-function highlightOperator(ClickedOperator) {
-  unhighlightOperator(LastHighlightedOperator);
+function highlightOperatorByClass(ClickedOperator) {
+  unhighlightOperatorByClass(LastHighlightedOperator);
   if (isTheOperatorHighlighted == true) {
     isTheOperatorHighlighted = false;
     switch (ClickedOperator) {
@@ -110,7 +111,7 @@ function highlightOperator(ClickedOperator) {
   }
 }
 
-function unhighlightOperator(ClickedOperator) {
+function unhighlightOperatorByClass(ClickedOperator) {
   if (isTheOperatorHighlighted == false) {
     isTheOperatorHighlighted = true;
     switch (ClickedOperator) {
@@ -255,7 +256,7 @@ function doKey(event) {
       break;
     case checkOperatorkeys(keyValue) == true:
       operator(keyValue);
-      highlightOperator(ClickedOperator);
+      highlightOperatorByClass(ClickedOperator);
       break;
     default:
       console.log("vacio");
