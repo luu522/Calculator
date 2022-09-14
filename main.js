@@ -14,6 +14,10 @@ window.onload = function() {
 function setResult(displayVal) {
   let newDisplay = displayVal.toString().replace(".", ",");
   document.getElementById("displayid").innerHTML = newDisplay;
+
+  if (newDisplay.includes(',')) {
+    disableButtons("btn-point");
+  }
 }
 
 // lo ideal es no necesitar esta función
@@ -58,9 +62,19 @@ function isNewDigitAllowed(){
   }
 }
 
+function disableSecondComma(){
+  result = getResult();
+  if (result.includes(",")) {
+    return false;
+  } else{
+    return true;
+  }
+}
+
 function calculatorReset() {
   unhighlightOperatorByClass(LastHighlightedOperator);
   setResult(0);
+  enableButtons('btn-point', 'number', 'operator');
 }
 
 function changeNumberSign() {
