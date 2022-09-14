@@ -15,12 +15,11 @@ function setResult(displayVal) {
   let newDisplay = displayVal.toString().replace(".", ",");
   document.getElementById("displayid").innerHTML = newDisplay;
 
-  if (newDisplay.includes(',')) {
-    disableButtons("btn-point");
-  }
+  // if (newDisplay.includes(',')) {
+  //   disableButtons("btn-point");
+  // }
 }
 
-// lo ideal es no necesitar esta función
 function getResult() {
   return document.getElementById("displayid").innerHTML;
 }
@@ -34,7 +33,7 @@ function addNumbersToDisplay(clickedNum) {
   result = getResult();
 
   if (clickedNum.includes(",")) {
-    if (disableSecondComma()) {
+    if (disableSecondComma() && isNewDigitAllowed()) {
       setResult(result + clickedNum);
     } 
   } else if (isNewDigitAllowed()) {
@@ -74,7 +73,6 @@ function disableSecondComma(){
 function calculatorReset() {
   unhighlightOperatorByClass(LastHighlightedOperator);
   setResult(0);
-  enableButtons('btn-point', 'number', 'operator');
 }
 
 function changeNumberSign() {
@@ -168,33 +166,59 @@ function getSecondNum(){
 function equalBtn() {
   switch (operationSymbol) {
     case "+":
-      result = Number((parseFloat(firstNum) + parseFloat(secondNum)).toFixed(9));
+      result = Number(parseFloat(firstNum) + parseFloat(secondNum));
       break;
     case "-":
-      result = Number((parseFloat(firstNum) - parseFloat(secondNum)).toFixed(9));
+      result = Number(parseFloat(firstNum) - parseFloat(secondNum));
       break;
     case "*":
-      result = Number((parseFloat(firstNum) * parseFloat(secondNum)).toFixed(9));
+      result = Number(parseFloat(firstNum) * parseFloat(secondNum));
       break;
     case "/":
-      result = Number((parseFloat(firstNum) / parseFloat(secondNum)).toFixed(9));
+      result = Number(parseFloat(firstNum) / parseFloat(secondNum));
       break;
     default:
       break;
   }
   secondNum = 0;
   firstNum = 0;
-  setResult(result);
+  if (result.toString().includes(".")) {
+    let decimalsLength = checkHowManyDecimalsAreAllowed();          // guardamos el numero de decimales que podemos tener
+    result = parseFloat(result).toFixed(decimalsLength);
+  }
+  setResult(parseFloat(result));
   showErrorMessage();
   isSecondNumberShown = true;
 }
 
 function showErrorMessage(){
-    let result = "";
-    result = getResult();
-    if (result == "Infinity" || result == "NaN" || result == "-Infinity" || result.length > 10) {
-      setResult("ERROR");
-    }
+  let result = "";
+  result = getResult();
+  if (result == "Infinity" || result == "NaN" || result == "-Infinity") {
+    setResult("ERROR");
+  }
+
+  MAX_DIGITS_IN_DISPLAY = 10;
+  if (result.includes(',') && result.includes('-')) {
+    MAX_DIGITS_IN_DISPLAY = MAX_DIGITS_IN_DISPLAY + 2;
+  } else if (result.includes(',') || result.includes('-')){
+    MAX_DIGITS_IN_DISPLAY = MAX_DIGITS_IN_DISPLAY + 1;
+  }
+  if (result.length > MAX_DIGITS_IN_DISPLAY) {
+    setResult("ERROR");
+  }
+}
+
+function checkHowManyDecimalsAreAllowed(){
+  let numberWithDecimals = "";
+  let decimalsAllowed = 10;
+  numberWithDecimals = numberWithDecimals + result;
+  if (numberWithDecimals.includes(".") && numberWithDecimals.includes("-")) {
+    decimalsAllowed = numberWithDecimals - numberWithDecimals.indexOf(".") + 1;          // +1 por el negativo
+  } else if (numberWithDecimals.includes(".")) {
+    decimalsAllowed = decimalsAllowed - numberWithDecimals.indexOf(".");
+  }
+  return decimalsAllowed;
 }
 
 // disabling buttons
