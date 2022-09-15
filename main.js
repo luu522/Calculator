@@ -5,10 +5,17 @@ let firstNum = "";
 let operationSymbol = "";
 let secondNum = "";
 let result = "";
-let isSecondNumberShown = false; 
+let isNewNumber = false;
+let isNewValueGet = false;
+let isOperationDone = false;
+let howMantTimesOperatorIsClicked = 0;
+let mistakeOperator = false;              // le da a 2 operadores
+let firstNumIsGet = false;
+let missingSecondNum = false;             // hacer operaciones sin segundo num y que de error
 
 window.onload = function() {
   calculatorReset();
+
 };
 
 function setResult(displayVal) {
@@ -18,6 +25,7 @@ function setResult(displayVal) {
   // if (newDisplay.includes(',')) {
   //   disableButtons("btn-point");
   // }
+  showErrorMessage();
 }
 
 function getResult() {
@@ -25,11 +33,17 @@ function getResult() {
 }
 
 function addNumbersToDisplay(clickedNum) {
-  if (isSecondNumberShown) {
-      // reset ??
-      setResult(0);
-      isSecondNumberShown = false;
+  if (firstNumIsGet) {
+      setResult("");
+      firstNumIsGet = false;
   }
+  
+  if (isOperationDone == true) {
+    setResult("");
+    resetVariables();
+    isOperationDone = false;
+  }
+
   result = getResult();
 
   if (clickedNum.includes(",")) {
@@ -43,6 +57,7 @@ function addNumbersToDisplay(clickedNum) {
       setResult(clickedNum);
     }
   }
+  getValues();
 }
 
 function isNewDigitAllowed(){
@@ -73,6 +88,7 @@ function disableSecondComma(){
 function calculatorReset() {
   unhighlightOperatorByClass(LastHighlightedOperator);
   setResult(0);
+  resetVariables();
 }
 
 function changeNumberSign() {
@@ -86,6 +102,7 @@ function changeNumberSign() {
     displayNumbers = -displayNumbers;
   }
   setResult(displayNumbers);
+  getValues();
 }
 
 function highlightOperatorByClass(ClickedOperator) {
@@ -148,22 +165,47 @@ function unhighlightOperatorByClass(ClickedOperator) {
   }
 }
 
-function getFirstNum(ClickedOperator){
-  isSecondNumberShown = true;
-    operationSymbol = ClickedOperator;
-    firstNum = getResult();
-    firstNum = firstNum.replace(",",".");
-}
-
-function getSecondNum(){
-  if (isSecondNumberShown == true) {
-    setResult("");
+function getOperator(ClickedOperator){
+  howMantTimesOperatorIsClicked++;
+  if (howMantTimesOperatorIsClicked > 1) {
+    mistakeOperator = true;
   }
-    secondNum = getResult();
-    secondNum = secondNum.replace(",",".");
+  if (isOperationDone) {
+    isOperationDone = false;
+  }
+  
+  operationSymbol = ClickedOperator;
+  makeOperations();
+  isNewValueGet = true;
+  firstNumIsGet = true;
 }
 
-function equalBtn() {
+function getValues() {
+  if (isNewValueGet == false) {
+    firstNum = "";
+    firstNum = firstNum + getResult();
+    firstNum = firstNum.replace(",", ".");
+  } else {
+    secondNum = "";
+    secondNum = secondNum + getResult();
+    secondNum = secondNum.replace(",", ".");
+  }
+}
+
+function makeOperations() {
+  if (firstNum == "") {
+    firstNum = 0;
+  }
+  if (secondNum == "") {
+    if (isOperationDone == true) {
+      missingSecondNum = true;
+    }
+    if (operationSymbol == "/" || operationSymbol == "*") {
+      secondNum = 1;
+    } else{
+      secondNum = 0;
+    }
+  }
   switch (operationSymbol) {
     case "+":
       result = Number(parseFloat(firstNum) + parseFloat(secondNum));
@@ -180,15 +222,26 @@ function equalBtn() {
     default:
       break;
   }
-  secondNum = 0;
-  firstNum = 0;
-  if (result.toString().includes(".")) {
-    let decimalsLength = checkHowManyDecimalsAreAllowed();          // guardamos el numero de decimales que podemos tener
-    result = parseFloat(result).toFixed(decimalsLength);
+
+  secondNum = "";
+  firstNum = result;
+
+  let decimalsLength = checkHowManyDecimalsAreAllowed();          // guardamos el numero de decimales que podemos tener
+  result = parseFloat(result).toFixed(decimalsLength);
+  result = parseFloat(result);
+}
+
+function equalBtn(){
+  isOperationDone = true;
+  makeOperations();
+  setResult(result);
+  mistakeOperator = false;
+  howMantTimesOperatorIsClicked = 0;
+
+  if (missingSecondNum == true) {
+    missingSecondNum = false;
+    setResult("ERROR");
   }
-  setResult(parseFloat(result));
-  showErrorMessage();
-  isSecondNumberShown = true;
 }
 
 function showErrorMessage(){
@@ -207,6 +260,18 @@ function showErrorMessage(){
   if (result.length > MAX_DIGITS_IN_DISPLAY) {
     setResult("ERROR");
   }
+}
+
+function resetVariables(){
+  firstNum = "";
+  secondNum = "";
+  result = "";
+  operationSymbol = "";
+  isNewNumber = false;
+  isNewValueGet = false;
+  howMantTimesOperatorIsClicked = 0;
+  mistakeOperator = false;
+  firstNumIsGet = false;
 }
 
 function checkHowManyDecimalsAreAllowed(){
@@ -255,7 +320,7 @@ function enableEqual(){
 
 //keyboard
 
-function doKey(event) {
+document.addEventListener("keydown", (event) => {
   event.preventDefault();
   let keyValue = event.key;
   console.log("keyValue: " + keyValue);
@@ -272,7 +337,7 @@ function doKey(event) {
     case "7":
     case "8":
     case "9":
-      add(keyValue);
+      addNumbersToDisplay(keyValue);
       break;
     case "0":
       let result = "";
@@ -280,27 +345,27 @@ function doKey(event) {
       if (result.includes("0")) {
         setResult(result);
       } else {
-        add(keyValue)
+        addNumbersToDisplay(keyValue)
       }
       break;
     case ",":
-      add(keyValue);
+      addNumbersToDisplay(keyValue);
       break;
     case "Escape":
-      cleanDisplay();
+      calculatorReset();
       break;
     case "Control":
       changeNumberSign();
       break;
     case checkOperatorkeys(keyValue) == true:
       operator(keyValue);
-      highlightOperatorByClass(ClickedOperator);
+      highlightOperators(Symbol);
       break;
     default:
       console.log("vacio");
       break;
   }
-}
+});
 
 function checkOperatorkeys(keyPressed) {
   if (keyPressed == "*" || "-" || "+" || "/") {
